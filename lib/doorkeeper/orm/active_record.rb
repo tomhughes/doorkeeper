@@ -23,31 +23,11 @@ module Doorkeeper
       autoload :StaleRecordsCleaner, "doorkeeper/orm/active_record/stale_records_cleaner"
 
       def self.initialize_models!
-        lazy_load do
-          if (options = Doorkeeper.config.active_record_options[:establish_connection])
-            Doorkeeper::Orm::ActiveRecord.models.each do |model|
-              model.establish_connection(options)
-            end
-          end
-        end
+        # No more needed
       end
 
       def self.initialize_application_owner!
-        lazy_load do
-          Doorkeeper.config.application_model.include(Doorkeeper::Models::Ownership)
-        end
-      end
-
-      def self.lazy_load(&block)
-        ActiveSupport.on_load(:active_record, {}, &block)
-      end
-
-      def self.models
-        [
-          Doorkeeper.config.access_grant_model,
-          Doorkeeper.config.access_token_model,
-          Doorkeeper.config.application_model,
-        ]
+        # No more needed
       end
     end
   end

@@ -17,7 +17,7 @@ module Doorkeeper
       end
     end
 
-    config.after_initialize do
+    config.to_prepare do
       Doorkeeper.setup_orm
     end
 

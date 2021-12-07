@@ -21,9 +21,10 @@ module Doorkeeper
   class MissingConfigurationBuilderClass < StandardError; end
 
   class << self
+    attr_reader :orm_adapter
+
     def configure(&block)
       @config = Config::Builder.new(&block).build
-      @config
     end
 
     # @return [Doorkeeper::Config] configuration instance
@@ -36,8 +37,6 @@ module Doorkeeper
 
     def setup_orm
       setup_orm_adapter
-      setup_orm_models
-      setup_application_owner if @config && @config.enable_application_owner?
     end
 
     def setup_orm_adapter
@@ -52,6 +51,7 @@ module Doorkeeper
       ERROR_MSG
     end
 
+    # TODO: remove the above
     def setup_orm_models
       @orm_adapter.initialize_models!
     end
@@ -296,6 +296,7 @@ module Doorkeeper
     option :skip_client_authentication_for_password_grant,
            default: false
 
+    # TODO: remove the option
     option :active_record_options,
            default: {},
            deprecated: { message: "Customize Doorkeeper models instead" }
