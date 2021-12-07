@@ -21,14 +21,6 @@ module Doorkeeper
   module Orm
     module ActiveRecord
       autoload :StaleRecordsCleaner, "doorkeeper/orm/active_record/stale_records_cleaner"
-
-      def self.initialize_models!
-        # No more needed
-      end
-
-      def self.initialize_application_owner!
-        # No more needed
-      end
     end
   end
 end

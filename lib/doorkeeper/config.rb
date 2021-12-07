@@ -37,6 +37,19 @@ module Doorkeeper
 
     def setup_orm
       setup_orm_adapter
+      run_orm_hooks
+
+      # Deprecated, will be removed soon
+      unless configuration.orm == :active_record
+        ::Kernel.warn <<~MSG.strip_heredoc
+          [DOORKEEPER] ORM "#{configuration.orm}" should move all it's setup logic under `#run_hooks` method for
+          the #{@orm_adapter.name}. Later versions of Doorkeeper will no longer support `setup_orm_models` and
+          `setup_application_owner` API.
+        MSG
+
+        setup_orm_models
+        setup_application_owner
+      end
     end
 
     def setup_orm_adapter
@@ -51,7 +64,10 @@ module Doorkeeper
       ERROR_MSG
     end
 
-    # TODO: remove the above
+    def run_orm_hooks
+      @orm_adapter.run_hooks if @orm_adapter.respond_to?(:run_hooks)
+    end
+
     def setup_orm_models
       @orm_adapter.initialize_models!
     end
